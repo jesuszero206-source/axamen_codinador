@@ -1,0 +1,16 @@
+<section class="folder-hero">
+  <p class="kicker">Tu selección personal</p>
+  <h1>Mi carpeta de duelista</h1>
+  <p>Guarda las cartas que quieras estudiar o recordar. Tu selección permanece en este navegador.</p>
+</section>
+
+@if (favorites.cards().length) {
+  <div class="collection-heading">
+    <div><span>{{ favorites.count() }}</span><p>{{ favorites.count() === 1 ? 'carta guardada' : 'cartas guardadas' }}</p></div>
+    <a routerLink="/search">Buscar más cartas &rarr;</a>
+  </div>
+  <div class="card-grid">@for (card of favorites.cards(); track card.id) { <app-card [card]="card" /> }</div>
+} @else {
+  <app-state-message state="empty" title="Tu carpeta está vacía" message="Usa la estrella de cualquier carta para guardarla aquí y crear tu selección personal." />
+  <a class="primary-link" routerLink="/search">Explorar la biblioteca</a>
+}

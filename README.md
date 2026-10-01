@@ -1,59 +1,43 @@
-# BlueEyesCardExplorer
+# Blue-Eyes Card Explorer
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.37.
+Aplicación Angular para buscar cartas de Yu-Gi-Oh!, consultar su información y explorar el arquetipo Blue-Eyes por expansión. Los datos se obtienen en tiempo real desde la API pública de YGOPRODeck.
 
-## Development server
+## Requisitos
 
-To start a local development server, run:
+- Node.js 20 o superior
+- npm 10 o superior
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Ejecutar el proyecto
 
 ```bash
-ng generate component component-name
+npm install
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Abrir `http://localhost:4200`.
+
+## Compilar para producción
 
 ```bash
-ng generate --help
+npm run build
 ```
 
-## Building
+El resultado se genera en `dist/blue-eyes-card-explorer`.
 
-To build the project run:
+## Estructura
 
-```bash
-ng build
-```
+- `core/models`: interfaces TypeScript para las respuestas de la API.
+- `core/services`: comunicación HTTP con YGOPRODeck y favoritos persistentes.
+- `shared`: tarjeta reutilizable y estados visuales.
+- `features/search`: buscador reactivo de cartas.
+- `features/card-detail`: detalle e impresiones de una carta.
+- `features/blue-eyes`: colección y filtro dinámico por expansión.
+- `features/favorites`: carpeta personal guardada en el navegador.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## API
 
-## Running unit tests
+- Busqueda parcial: `cardinfo.php?fname=termino`
+- Colección Blue-Eyes: `cardinfo.php?archetype=Blue-Eyes`
+- Detalle: `cardinfo.php?id=identificador`
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+La búsqueda usa `debounceTime`, `distinctUntilChanged` y `switchMap` para evitar solicitudes innecesarias.

@@ -1,1 +1,38 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Nunito+Sans:wght@400;600;700;800;900&display=swap');
+
+:root {
+  --font-body: 'Nunito Sans', system-ui, sans-serif;
+  --font-display: 'Cinzel', Georgia, serif;
+  --text-primary: #fffaf0;
+  --text-muted: #c9b9d4;
+  --text-dim: #91809d;
+  --accent: #b268dc;
+  --accent-strong: #7f30ae;
+  --gold: #e4b64f;
+  --gold-light: #ffe6a0;
+  --border: rgba(230, 188, 89, .2);
+  --radius: .75rem;
+  --radius-lg: 1rem;
+  --shadow: 0 18px 48px rgba(10, 1, 18, .42);
+  color-scheme: dark;
+  color: var(--text-primary);
+  background: #100719;
+  font-family: var(--font-body);
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+html { min-width: 320px; scroll-behavior: smooth; }
+body {
+  min-width: 320px; min-height: 100vh; margin: 0; overflow-x: hidden;
+  background:
+    radial-gradient(circle at 10% 8%, rgba(120,42,160,.25), transparent 25rem),
+    radial-gradient(circle at 92% 22%, rgba(54,74,167,.18), transparent 28rem),
+    linear-gradient(180deg, #160923 0%, #09040f 100%);
+}
+body::before {
+  position: fixed; z-index: -1; pointer-events: none; content: ''; inset: 0; opacity: .25;
+  background-image: repeating-linear-gradient(45deg, rgba(238,198,104,.025) 0 1px, transparent 1px 16px), repeating-linear-gradient(-45deg, rgba(179,104,218,.025) 0 1px, transparent 1px 16px);
+}
+button, input, select { font-family: inherit; }
+::selection { color: #24102f; background: var(--gold-light); }

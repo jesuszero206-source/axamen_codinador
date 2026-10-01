@@ -1,0 +1,35 @@
+<a class="back" routerLink="/search"><span aria-hidden="true">&larr;</span> Volver a la biblioteca</a>
+@if (vm$ | async; as vm) {
+  @switch (vm.state) {
+    @case ('loading') { <app-state-message state="loading" title="Abriendo la ficha..." message="Consultando la información de la carta." /> }
+    @case ('error') { <app-state-message state="error" title="No se pudo abrir la ficha" [message]="vm.message ?? ''" (retry)="retry()" /> }
+    @case ('empty') { <app-state-message state="empty" title="Carta no encontrada" message="La API no devolvió información para esta carta." /> }
+    @case ('success') {
+      @if (vm.card; as card) {
+        <article class="detail">
+          <div class="artwork">@if (card.card_images[0]; as image) { <img [src]="image.image_url" [alt]="card.name" /> }</div>
+          <div class="content">
+            <p class="kicker">Ficha del archivo · {{ card.archetype || 'Yu-Gi-Oh!' }}</p>
+            <h1>{{ card.name }}</h1>
+            <div class="badges"><span>{{ translateCardType(card.type) }}</span><span>{{ translateRace(card.race) }}</span>@if (card.attribute) { <span>{{ translateAttribute(card.attribute) }}</span> }</div>
+            <div class="stats">
+              @if (card.level !== undefined) { <div><span>Nivel</span><strong>{{ card.level }}</strong></div> }
+              @if (card.atk !== undefined) { <div><span>ATK</span><strong>{{ card.atk | number }}</strong></div> }
+              @if (card.def !== undefined) { <div><span>DEF</span><strong>{{ card.def | number }}</strong></div> }
+            </div>
+            <button class="save-card" type="button" [class.saved]="favorites.isFavorite(card.id)" (click)="toggleFavorite(card)">{{ favorites.isFavorite(card.id) ? '★ Guardada en mi carpeta' : '☆ Guardar en mi carpeta' }}</button>
+            <section class="description"><h2>Texto oficial de la carta</h2><p>{{ card.desc }}</p></section>
+          </div>
+        </article>
+        <section class="printings">
+          <div class="section-heading"><div><p class="kicker">Archivo del coleccionista</p><h2>Expansiones y ediciones</h2></div><span>{{ card.card_sets?.length || 0 }} impresiones encontradas</span></div>
+          @if (card.card_sets?.length) {
+            <div class="table-wrap"><table><thead><tr><th>Expansión</th><th>Código</th><th>Rareza</th><th>Precio API</th></tr></thead>
+              <tbody>@for (set of card.card_sets; track set.set_code + set.set_name) { <tr><td>{{ set.set_name }}</td><td><code>{{ set.set_code }}</code></td><td>{{ set.set_rarity }}</td><td class="price">${{ set.set_price }}</td></tr> }</tbody>
+            </table></div>
+          } @else { <app-state-message state="empty" title="Sin impresiones disponibles" message="YGOPRODeck no proporciona expansiones para esta carta." /> }
+        </section>
+      }
+    }
+  }
+}

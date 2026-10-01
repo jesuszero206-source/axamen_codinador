@@ -1,0 +1,12 @@
+<section class="state" [class.loading]="state() === 'loading'" role="status" aria-live="polite">
+  @if (state() === 'loading') {
+    <span class="spinner" aria-hidden="true"></span>
+  } @else {
+    <span class="state-icon" aria-hidden="true">{{ state() === 'error' ? '!' : '◇' }}</span>
+  }
+  <div>
+    @if (title()) { <h2>{{ title() }}</h2> }
+    @if (message()) { <p>{{ message() }}</p> }
+    @if (state() === 'error') { <button type="button" (click)="retry.emit()">Intentar de nuevo</button> }
+  </div>
+</section>

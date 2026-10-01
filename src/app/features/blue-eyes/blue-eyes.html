@@ -1,0 +1,36 @@
+<section class="collection-hero">
+  <div>
+    <p class="kicker">Santuario del dragón blanco</p>
+    <h1>Legado Blue‑Eyes</h1>
+    <p>Una colección dedicada al monstruo insignia de Seto Kaiba. Recorre su arquetipo, descubre sus ediciones y guarda tus favoritas.</p>
+    <blockquote>“¡Surge, Dragón Blanco de Ojos Azules!”</blockquote>
+  </div>
+  <span class="seal" aria-hidden="true">LUZ<br /><b>★ 8</b><small>DRAGÓN</small></span>
+</section>
+
+@if (vm$ | async; as vm) {
+  @switch (vm.state) {
+    @case ('loading') { <app-state-message state="loading" title="Invocando la colección..." message="Consultando las cartas del arquetipo Blue-Eyes." /> }
+    @case ('error') { <app-state-message state="error" title="No se pudo abrir el santuario" [message]="vm.message ?? ''" (retry)="retry()" /> }
+    @case ('empty') { <app-state-message state="empty" title="El santuario está vacío" message="La API no devolvió cartas para este arquetipo." /> }
+    @case ('success') {
+      <section class="filter-panel">
+        <div><span class="filter-icon" aria-hidden="true">◆</span><div><label for="expansion">Filtrar por expansión</label><p>Las opciones se generan automáticamente con las impresiones de la API.</p></div></div>
+        <select id="expansion" [formControl]="expansionControl">
+          <option value="all">Todas las expansiones</option>
+          @for (expansion of vm.expansions; track expansion) { <option [value]="expansion">{{ expansion }}</option> }
+        </select>
+      </section>
+      <div class="summary">
+        <div><strong>{{ vm.cards.length }}</strong><span>Cartas visibles</span></div>
+        <div><strong>{{ vm.expansions.length }}</strong><span>Expansiones únicas</span></div>
+        <p>{{ vm.selectedExpansion === 'all' ? 'Colección completa del arquetipo' : vm.selectedExpansion }}</p>
+      </div>
+      @if (vm.cards.length) {
+        <div class="card-grid">@for (card of vm.cards; track card.id) { <app-card [card]="card" /> }</div>
+      } @else {
+        <app-state-message state="empty" title="No hay cartas en esta expansión" message="Selecciona otra expansión para continuar explorando." />
+      }
+    }
+  }
+}

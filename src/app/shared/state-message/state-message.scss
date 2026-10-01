@@ -1,0 +1,7 @@
+.state { display: flex; min-height: 180px; align-items: center; justify-content: center; gap: 1rem; padding: 2rem; border: 1px dashed var(--border); border-radius: var(--radius); color: var(--text-muted); text-align: left; background: rgba(8, 20, 48, .45); }
+.state-icon { display: grid; width: 2.75rem; aspect-ratio: 1; place-items: center; border: 1px solid var(--border); border-radius: 50%; color: var(--accent); font-size: 1.2rem; }
+h2 { margin: 0; color: var(--text-primary); font-family: var(--font-display); font-size: 1rem; }
+p { max-width: 520px; margin: .45rem 0 0; line-height: 1.55; }
+button { margin-top: .85rem; padding: .55rem .8rem; border: 0; border-radius: .4rem; color: #281035; background: var(--gold); font-weight: 900; cursor: pointer; }
+.spinner { width: 2rem; aspect-ratio: 1; border: 3px solid rgba(229, 183, 78, .18); border-top-color: var(--gold); border-radius: 50%; animation: spin .75s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }

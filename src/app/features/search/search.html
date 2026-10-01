@@ -1,0 +1,57 @@
+<section class="hero">
+  <div class="hero-copy">
+    <p class="kicker">Una biblioteca hecha por duelistas</p>
+    <h1>El archivo de cada<br /><span>carta legendaria</span></h1>
+    <p class="intro">Consulta el grimorio de Yu-Gi-Oh!, estudia sus estadísticas y prepara tu próxima jugada. Los nombres oficiales de las cartas se conservan tal como aparecen en la API.</p>
+    <div class="fan-note"><span aria-hidden="true">✦</span> Base de datos para fans, coleccionistas y duelistas</div>
+  </div>
+  <div class="millennium-seal" aria-hidden="true"><span>千</span><small>ARCHIVO<br />DEL DUELO</small></div>
+</section>
+
+<section class="search-panel" aria-label="Buscador de cartas">
+  <div class="panel-title"><span aria-hidden="true">◆</span><div><h2>Busca en el archivo</h2><p>Escribe el nombre completo o una parte.</p></div></div>
+  <label for="card-search">Nombre de la carta</label>
+  <div class="search-field">
+    <span aria-hidden="true">⌕</span>
+    <input id="card-search" type="search" [formControl]="searchControl" placeholder="Ej. Blue-Eyes, Dark Magician, Kuriboh..." autocomplete="off" />
+    @if (searchControl.value) { <button type="button" (click)="clear()" aria-label="Limpiar búsqueda">&times;</button> }
+  </div>
+  <div class="quick-searches">
+    <span>Búsquedas rápidas:</span>
+    <button type="button" (click)="quickSearch('Blue-Eyes')">Blue-Eyes</button>
+    <button type="button" (click)="quickSearch('Dark Magician')">Dark Magician</button>
+    <button type="button" (click)="quickSearch('Kuriboh')">Kuriboh</button>
+  </div>
+</section>
+
+@if (vm$ | async; as vm) {
+  <section class="results" aria-live="polite">
+    @switch (vm.state) {
+      @case ('idle') { <app-state-message state="idle" title="Tu duelo comienza aquí" message="Busca una carta o elige una sugerencia para consultar el archivo oficial." /> }
+      @case ('loading') { <app-state-message state="loading" title="Revisando el archivo..." message="Estamos consultando YGOPRODeck." /> }
+      @case ('empty') { <app-state-message state="empty" title="Esa carta no está en el archivo" message="Prueba con otra palabra o revisa cómo está escrito el nombre oficial." /> }
+      @case ('error') { <app-state-message state="error" title="La conexión con el archivo falló" [message]="vm.message ?? ''" (retry)="retry()" /> }
+      @case ('success') {
+        <div class="results-header">
+          <div><p class="kicker">Cartas localizadas</p><h2>{{ vm.cards.length }} resultados</h2></div>
+          <label class="sort">Ordenar por <select [formControl]="sortControl"><option value="name">Nombre</option><option value="atk">Mayor ATK</option><option value="level">Mayor nivel</option></select></label>
+        </div>
+        <div class="card-grid">@for (card of vm.cards; track card.id) { <app-card [card]="card" /> }</div>
+      }
+    }
+  </section>
+}
+
+@if ((vm$ | async)?.state === 'idle') {
+  @if (suggestedCards$ | async; as suggestedCards) {
+    @if (suggestedCards.length) {
+      <section class="suggestions" aria-labelledby="suggestions-title">
+        <div class="suggestions-heading">
+          <div><p class="kicker">Selección del archivo</p><h2 id="suggestions-title">Cartas sugeridas para duelistas</h2></div>
+          <span>Clásicos que todo fan debería conocer</span>
+        </div>
+        <div class="card-grid">@for (card of suggestedCards; track card.id) { <app-card [card]="card" /> }</div>
+      </section>
+    }
+  }
+}

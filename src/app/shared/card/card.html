@@ -1,0 +1,30 @@
+<article class="card">
+  <a class="card-main" [routerLink]="['/card', card().id]">
+    <div class="card-image">
+      @if (card().card_images[0]; as image) {
+        <img [src]="image.image_url_small" [alt]="card().name" loading="lazy" />
+      } @else {
+        <div class="image-fallback">Sin imagen</div>
+      }
+      @if (card().attribute) { <span class="attribute">{{ translateAttribute(card().attribute!) }}</span> }
+    </div>
+    <div class="card-body">
+      <p class="eyebrow">{{ translateCardType(card().type) }}</p>
+      <h3>{{ card().name }}</h3>
+      <div class="stats" aria-label="Estadísticas de la carta">
+        @if (card().level !== undefined) { <span>Nivel <strong>{{ card().level }}</strong></span> }
+        @if (card().atk !== undefined) { <span>ATK <strong>{{ card().atk }}</strong></span> }
+        @if (card().def !== undefined) { <span>DEF <strong>{{ card().def }}</strong></span> }
+      </div>
+      <span class="details-link">Abrir ficha del archivo <span aria-hidden="true">&rarr;</span></span>
+    </div>
+  </a>
+  <button
+    class="favorite"
+    type="button"
+    [class.saved]="favorites.isFavorite(card().id)"
+    (click)="toggleFavorite()"
+    [attr.aria-label]="favorites.isFavorite(card().id) ? 'Quitar de mi carpeta' : 'Guardar en mi carpeta'"
+    [title]="favorites.isFavorite(card().id) ? 'Quitar de mi carpeta' : 'Guardar en mi carpeta'"
+  >{{ favorites.isFavorite(card().id) ? '★' : '☆' }}</button>
+</article>
